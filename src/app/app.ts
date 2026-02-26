@@ -4,13 +4,17 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-root',
   standalone: true,
-  // Мы должны ОБЯЗАТЕЛЬНО импортировать RouterOutlet,
-  // чтобы он мог отображать страницы из папки pages
   imports: [RouterOutlet],
   template: `
-  <main>
-  <router-outlet></router-outlet>
-  </main>
+  <router-outlet />
+  `,
+  styles: `
+  :host {
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+    /* Мы удалили max-width и padding, чтобы Цитадель была величественной! */
+  }
   `,
 })
 export class App {}

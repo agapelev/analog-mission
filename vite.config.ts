@@ -22,7 +22,6 @@ export default defineConfig(({ mode }) => ({
                                              nitro: {
                                                preset: 'cloudflare-pages',
                                                // ФИНАЛЬНЫЙ ШТРИХ: Гарантируем, что Nitro создаст правильную структуру
-                                               // для Cloudflare, чтобы избежать ошибки "Could not resolve _worker.js"
                                                output: {
                                                  dir: '.output',
                                                  publicDir: '.output/public',
@@ -33,12 +32,13 @@ export default defineConfig(({ mode }) => ({
                                                routes: [
                                                  '/',
                                                  '/blog',
+                                                 '/blog/pervaya-zapis', // ТЕПЕРЬ ЭТОТ МАРШРУТ УЗАКОНЕН
                                                  '/school',
                                                  '/journal',
                                                  '/web-arystan'
                                                ],
                                                sitemap: {
-                                                 host: 'https://ваша-цитадель.pages.dev', // Замените на ваш домен, когда он будет готов
+                                                 host: 'https://ваша-цитадель.pages.dev',
                                                },
                                              },
                                            }),

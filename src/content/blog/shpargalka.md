@@ -1,10 +1,30 @@
 ---
+// Отредактируйте ваш src/app/post-attributes.ts вот так:
+export default interface PostAttributes {
+  title: string;
+  slug: string;
+  description: string;
+  date: string;
+  coverImage?: string; // "?" означает: "может быть, а может и не быть"
+  category?: string;   // Теперь category официально разрешена, но не обязательна
+}
+---
+---
 title: "Начало пути: Цитадель Духа в цифровую эпоху"
 slug: "pervaya-zapis"
 description: "Манифест миссии Shekinah Cloud. О том, как соединить незыблемость веры с текучестью программного кода."
 date: "26 февраля 2026"
 category: "Трезвение"
 ---
+
+3. Место «Отображения»: [slug].page.ts
+
+Здесь настройки прописываются в шаблоне (HTML). Если вы хотите, чтобы категория отображалась на странице статьи, её нужно «позвать» в коде:
+
+<span *ngIf="post.attributes.category" class="text-emerald-500">
+  #{{ post.attributes.category }}
+</span>
+
 
 # Первое слово: Зачем мы здесь?
 
