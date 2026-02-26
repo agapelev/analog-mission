@@ -1,6 +1,6 @@
 {
   "name": "analog-mission",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "private": true,
   "engines": {
@@ -53,15 +53,15 @@
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^4.0.18"
   },
+  "workspaces": [
+    "."
+  ],
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
       "esbuild",
       "lmdb",
       "msgpackr-extract"
-    ],
-    "packages": [
-      "."
     ]
   }
 }
