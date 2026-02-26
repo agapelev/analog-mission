@@ -1,12 +1,22 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { NgFor, AsyncPipe } from '@angular/common';
+import { injectContentFiles } from '@analogjs/content';
+
+// Описываем структуру данных (Frontmatter)
+export interface PostAttributes {
+  title: string;
+  slug: string;
+  description: string;
+  date: string;
+  category?: string; // Добавим категорию для гибкости
+}
 
 @Component({
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, NgFor, AsyncPipe],
   template: `
   <div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-
   <nav class="w-full border-b border-slate-800 bg-slate-900/50 px-8 py-4 flex justify-between items-center backdrop-blur-md sticky top-0 z-50">
   <div class="flex items-center gap-4">
   <span class="text-2xl">✍️</span>
@@ -30,37 +40,27 @@ import { RouterLink } from '@angular/router';
   <div class="max-w-[1920px] mx-auto flex flex-col lg:flex-row gap-12">
 
   <div class="lg:w-3/4 space-y-12">
-
-  <article class="group bg-slate-900/30 border border-slate-800/60 p-10 rounded-3xl hover:bg-slate-900/60 transition-all duration-500 shadow-2xl overflow-hidden relative">
+  <article *ngFor="let post of posts" class="group bg-slate-900/30 border border-slate-800/60 p-10 rounded-3xl hover:bg-slate-900/60 transition-all duration-500 shadow-2xl overflow-hidden relative">
   <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-[80px] group-hover:bg-emerald-500/10 transition-all"></div>
 
   <div class="flex items-center gap-4 text-xs font-mono text-emerald-500/70 mb-6 uppercase tracking-widest">
-  <span>25 февраля 2026</span>
+  <span>{{ post.attributes.date }}</span>
   <span class="w-12 h-[1px] bg-slate-800"></span>
-  <span>Архитектура</span>
+  <span>{{ post.attributes.category || 'Общее' }}</span>
   </div>
 
   <h2 class="text-4xl font-bold text-white mb-6 group-hover:text-emerald-300 transition-colors leading-tight">
-  Запуск «Цитадели» 2.0: Единство веры и кода
+  {{ post.attributes.title }}
   </h2>
 
   <p class="text-slate-400 text-lg leading-relaxed mb-8 max-w-4xl italic">
-  «Мы завершили создание фундамента. Теперь каждая страница — это открытое пространство,
-  готовое принять в себя глубину размышлений. Дизайн в стиле Wide Screen позволяет
-  мысли не тесниться в узких рамках...»
+  {{ post.attributes.description }}
   </p>
 
-  <button class="flex items-center gap-2 text-sm font-black text-emerald-500 uppercase tracking-widest group-hover:translate-x-2 transition-transform">
+  <a [routerLink]="['/blog', post.attributes.slug]" class="flex items-center gap-2 text-sm font-black text-emerald-500 uppercase tracking-widest group-hover:translate-x-2 transition-transform">
   Читать полностью <span>→</span>
-  </button>
+  </a>
   </article>
-
-  <div class="border border-slate-900 p-10 rounded-3xl opacity-40 grayscale">
-  <div class="h-4 w-32 bg-slate-800 mb-6 rounded"></div>
-  <div class="h-8 w-3/4 bg-slate-800 mb-4 rounded"></div>
-  <div class="h-4 w-full bg-slate-800 rounded"></div>
-  </div>
-
   </div>
 
   <aside class="lg:w-1/4 space-y-8">
@@ -73,33 +73,26 @@ import { RouterLink } from '@angular/router';
   <li class="hover:text-emerald-300 cursor-pointer transition-colors flex justify-between">
   <span>Разработка</span> <span class="text-slate-700 font-mono">08</span>
   </li>
-  <li class="hover:text-emerald-300 cursor-pointer transition-colors flex justify-between">
-  <span>Философия</span> <span class="text-slate-700 font-mono">05</span>
-  </li>
   </ul>
   </div>
-
   <div class="p-8 border border-slate-900 rounded-3xl text-center italic text-slate-600 text-sm leading-relaxed">
   «Слово — это одежда мысли, пусть она будет достойной».
   </div>
   </aside>
-
   </div>
   </main>
 
-  <<footer class="w-full py-12 text-center border-t border-slate-900 bg-slate-950">
-  <div class="flex flex-col items-center gap-4">
-
+  <footer class="w-full py-12 text-center border-t border-slate-900 bg-slate-950">
   <p class="text-[11px] md:text-sm tracking-[0.3em] uppercase text-slate-300 font-mono font-medium">
   СЛОВО // ЦИФРОВОЕ ОТРАЖЕНИЕ // 2026
   </p>
-
-  <p class="text-[10px] tracking-[0.2em] uppercase text-slate-500 font-sans">
-  Шехина Облачная Миссия • Синергия веры и технологий • При поддержке Gemini
-  </p>
-
-  </div>
   </footer>
+  </div>
   `,
 })
-export default class BlogPage {}
+export default class BlogPage {
+  // Автоматически подгружаем файлы из папки blog
+  readonly posts = injectContentFiles<PostAttributes>((contentFile) =>
+  contentFile.filename.includes('/src/content/blog/')
+  );
+}
