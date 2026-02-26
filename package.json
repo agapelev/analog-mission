@@ -59,6 +59,9 @@
       "esbuild",
       "lmdb",
       "msgpackr-extract"
+    ],
+    "packages": [
+      "."
     ]
   }
 }
