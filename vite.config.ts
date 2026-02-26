@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import tailwindcss from '@tailwindcss/vite';
 
+// Конфигурация Цитадели для Cloudflare Pages
 export default defineConfig(({ mode }) => ({
   publicDir: 'src/assets',
     build: {
@@ -13,14 +14,20 @@ export default defineConfig(({ mode }) => ({
       mainFields: ['module'],
     },
     plugins: [
-      // Попробуйте этот порядок: Tailwind ПЕРЕД Analog
       tailwindcss(),
                                            analog({
-                                             content: true, // Это включает @analogjs/content
+                                             content: true,
                                              static: true,
                                              ssr: true,
                                              nitro: {
                                                preset: 'cloudflare-pages',
+                                               // ФИНАЛЬНЫЙ ШТРИХ: Гарантируем, что Nitro создаст правильную структуру
+                                               // для Cloudflare, чтобы избежать ошибки "Could not resolve _worker.js"
+                                               output: {
+                                                 dir: '.output',
+                                                 publicDir: '.output/public',
+                                                   serverDir: '.output/server',
+                                               },
                                              },
                                              prerender: {
                                                routes: [
@@ -31,12 +38,12 @@ export default defineConfig(({ mode }) => ({
                                                  '/web-arystan'
                                                ],
                                                sitemap: {
-                                                 host: 'https://ваша-цитадель.pages.dev',
+                                                 host: 'https://ваша-цитадель.pages.dev', // Замените на ваш домен, когда он будет готов
                                                },
                                              },
                                            }),
     ],
-    // Явно скажем Vite не пытаться самому обрабатывать Markdown как JS
+    // Защита от ложной интерпретации Markdown как скриптов
     assetsInclude: ['**/*.md'],
     test: {
       globals: true,
