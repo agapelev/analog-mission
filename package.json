@@ -5,7 +5,7 @@
   "private": true,
   "engines": {
     "node": ">=22.16.0",
-    "pnpm": ">=10.0.0"
+    "pnpm": ">=9.15.4"
   },
   "scripts": {
     "ng": "ng",
@@ -53,9 +53,6 @@
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^4.0.18"
   },
-  "workspaces": [
-    "."
-  ],
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
