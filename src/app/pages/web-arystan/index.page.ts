@@ -15,12 +15,12 @@ import { RouterLink } from '@angular/router';
   <span class="text-[10px] text-slate-600 uppercase tracking-widest">Status: Production_Ready</span>
   </div>
   </div>
-  <a routerLink="/" class="group flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-orange-500 transition-all uppercase">
+  <a routerLink="/" class="group flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-orange-500 transition-all uppercase no-underline">
   <span class="group-hover:-translate-x-1 transition-transform">exit_to_home()</span>
   </a>
   </nav>
 
-  <header class="w-full py-24 px-8 bg-gradient-to-b from-orange-950/10 to-slate-950 border-b border-slate-900 overflow-hidden relative">
+  <header class="w-full py-24 px-8 bg-gradient-to-b from-orange-950/10 to-slate-950 border-b border-slate-900 overflow-hidden relative text-left">
   <div class="absolute inset-0 opacity-10 pointer-events-none"
   style="background-image: radial-gradient(#f97316 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
 
@@ -36,12 +36,11 @@ import { RouterLink } from '@angular/router';
 
   <main class="flex-grow w-full px-8 py-16">
   <div class="max-w-[1920px] mx-auto">
-
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
   <div class="bg-black/40 border border-slate-800 p-8 rounded-xl border-t-2 border-t-orange-600">
   <h3 class="text-orange-500 text-xs font-black uppercase tracking-widest mb-6">Core_Stack</h3>
-  <ul class="space-y-3 text-sm text-slate-400">
+  <ul class="space-y-3 text-sm text-slate-400 p-0 list-none">
   <li class="flex items-center gap-2">
   <span class="w-1.5 h-1.5 bg-orange-600 rounded-full"></span> Analog.js 2.2.3
   </li>
@@ -91,10 +90,12 @@ import { RouterLink } from '@angular/router';
   </div>
   </section>
 
-  <footer class="w-full py-8 text-center text-slate-900 text-[10px] uppercase tracking-[0.5em] border-t border-slate-900">
-  Arystan.System.Kernel.2.0 // Build_2026_Feb
+  <footer class="w-full py-16 text-center border-t border-slate-900 bg-slate-950">
+  <p class="text-xs md:text-sm uppercase tracking-[0.3em] text-slate-200 font-medium px-4">
+  Web Development Studio Web Arystan Kazakhstan <span class="text-orange-500 mx-2">&</span> Shekinah Cloud Mission
+  </p>
   </footer>
-  </div>
-  `,
+
+  </div> `,
 })
 export default class ArystanPage {}
