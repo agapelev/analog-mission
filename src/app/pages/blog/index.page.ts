@@ -2,18 +2,24 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { RouteMeta } from '@analogjs/router';
 import { injectContentFiles } from '@analogjs/content';
-import { DatePipe, NgForOf } from '@angular/common';
+import { DatePipe, NgForOf, NgIf } from '@angular/common'; // Добавил NgIf
 
 import type PostAttributes from '../../post-attributes';
 
 export const routeMeta: RouteMeta = {
   title: 'Блог Мыслей | Цитадель Духа',
+  meta: [
+    {
+      name: 'description',
+      content: 'Архив цифровых свитков Цитадели Духа. Размышления о симбиозе интеллекта, веры и технологий будущего в 2026 году.'
+    }
+  ],
 };
 
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [RouterLink, DatePipe, NgForOf],
+  imports: [RouterLink, DatePipe, NgForOf, NgIf],
   template: `
   <div class="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-emerald-500/30 overflow-x-hidden">
 
@@ -39,6 +45,12 @@ export const routeMeta: RouteMeta = {
   <div class="lg:w-2/3 space-y-20">
   @for (post of posts; track post.attributes.slug) {
     <article class="group relative text-left">
+    <div *ngIf="post.attributes.coverImage" class="mb-8 overflow-hidden rounded-3xl border border-slate-800 aspect-[21/9]">
+    <img [src]="post.attributes.coverImage"
+    class="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-105 group-hover:scale-100"
+    [alt]="post.attributes.title">
+    </div>
+
     <div class="mb-4 flex items-center gap-4">
     <time class="text-emerald-500 font-mono text-xs uppercase tracking-widest">
     {{ post.attributes.date | date: 'mediumDate' }}
@@ -82,40 +94,25 @@ export const routeMeta: RouteMeta = {
   </div>
   </div>
   </aside>
-
   </div>
   </main>
 
   <footer class="border-t border-slate-800 bg-[#010409] py-12 mt-20">
   <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-
   <div class="text-slate-400 font-mono text-[11px] uppercase tracking-widest">
-  Разработано
-  <a href="/web-arystan" target="_blank" class="text-emerald-500 hover:text-emerald-300 transition-colors font-bold">
-  Web Development Studio Web Arystan
-  </a>
+  Разработано <a href="/web-arystan" target="_blank" class="text-emerald-500 hover:text-emerald-300 font-bold transition-colors">Web Arystan</a>
   </div>
-
   <div class="text-slate-400 font-mono text-[11px] uppercase tracking-widest text-right">
-  При поддержке
-  <a href="https://geminicli.com" target="_blank" class="text-cyan-500 hover:text-cyan-300 transition-colors font-bold">
-  AI Gemini
-  </a>
+  При поддержке <a href="https://geminicli.com" target="_blank" class="text-cyan-500 hover:text-cyan-300 font-bold transition-colors">AI Gemini</a>
   <span class="ml-4 text-slate-600">| 2026 | Soli Deo Gloria</span>
   </div>
-
   </div>
   </footer>
   </div>
   `,
   styles: [`
   :host { display: block; }
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .animate-gradient-text {
     background: linear-gradient(90deg, #34d399, #22d3ee, #3b82f6, #34d399);
     background-size: 200% auto;
@@ -123,21 +120,14 @@ export const routeMeta: RouteMeta = {
     -webkit-text-fill-color: transparent;
     animation: shine 5s linear infinite;
   }
-  @keyframes shine {
-    to { background-position: 200% center; }
-  }
+  @keyframes shine { to { background-position: 200% center; } }
   `],
 })
 export default class Blog {
   readonly posts = injectContentFiles<PostAttributes>();
-
   get allTags(): string[] {
     const tags = new Set<string>();
-    this.posts.forEach(post => {
-      if (post.attributes.tags && Array.isArray(post.attributes.tags)) {
-        post.attributes.tags.forEach(t => tags.add(t));
-      }
-    });
+    this.posts.forEach(p => p.attributes.tags?.forEach(t => tags.add(t)));
     return Array.from(tags).sort();
   }
 }

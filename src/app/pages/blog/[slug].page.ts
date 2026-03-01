@@ -10,16 +10,22 @@ import PostAttributes from '../../post-attributes';
   template: `
   <div class="min-h-screen bg-[#020617] text-zinc-300 flex flex-col items-center selection:bg-emerald-500/30">
   <ng-container *ngIf="post$ | async as post; else noPost">
-  <header class="w-full py-24 px-6 md:px-12 bg-[#020617] border-b border-zinc-800 relative overflow-hidden">
-  <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+
+  <header class="w-full min-h-[70vh] flex flex-col justify-end py-24 px-6 md:px-12 relative overflow-hidden border-b border-zinc-800">
+  <div *ngIf="post.attributes.coverImage" class="absolute inset-0 z-0">
+  <img [src]="post.attributes.coverImage" class="w-full h-full object-cover opacity-40 scale-105" [alt]="post.attributes.title">
+  <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/40 to-transparent"></div>
+  </div>
+
+  <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none z-0">
   <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-blue-500/20"></div>
   </div>
 
-  <div class="max-w-4xl mx-auto relative z-10 text-left">
+  <div class="max-w-4xl mx-auto relative z-10 text-left w-full">
   <a routerLink="/blog" class="text-emerald-500 uppercase tracking-[0.5em] text-[10px] no-underline mb-12 inline-block hover:text-emerald-300 transition-colors font-mono font-bold">
   ← Назад в архив
   </a>
-  <h1 class="text-4xl md:text-7xl font-bold text-zinc-100 italic tracking-tight leading-tight mb-8">
+  <h1 class="text-4xl md:text-7xl font-bold text-zinc-100 italic tracking-tight leading-tight mb-8 drop-shadow-2xl">
   {{ post.attributes.title }}
   </h1>
   <div class="flex items-center gap-4">
@@ -40,35 +46,26 @@ import PostAttributes from '../../post-attributes';
 
   <footer class="w-full border-t border-slate-800 bg-[#010409] py-12">
   <div class="max-w-4xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-  <div class="text-slate-400 font-mono text-[11px] uppercase tracking-widest text-center md:text-left">
-  Разработано
-  <a href="/web-arystan" target="_blank" class="text-emerald-500 hover:text-emerald-300 transition-colors font-bold">
-  Web Development Studio Web Arystan
-  </a>
+  <div class="text-slate-400 font-mono text-[11px] uppercase tracking-widest">
+  Разработано <a href="/web-arystan" target="_blank" class="text-emerald-500 font-bold">Web Arystan</a>
   </div>
-  <div class="text-slate-400 font-mono text-[11px] uppercase tracking-widest text-center md:text-right">
-  При поддержке
-  <a href="https://geminicli.com" target="_blank" class="text-cyan-500 hover:text-cyan-300 transition-colors font-bold">
-  AI Gemini
-  </a>
-  <span class="ml-4 text-slate-600">| 2026</span>
+  <div class="text-slate-400 font-mono text-[11px] uppercase tracking-widest">
+  При поддержке <a href="https://geminicli.com" target="_blank" class="text-cyan-500 font-bold">AI Gemini</a>
   </div>
   </div>
   </footer>
   </ng-container>
 
   <ng-template #noPost>
-  <div class="py-40 text-center uppercase font-black text-zinc-800 text-3xl tracking-[0.2em] font-mono animate-pulse">
-  Свиток не обнаружен <br>
-  <span class="text-sm font-light mt-4 block text-zinc-600 italic">Связь с Цитаделью прервана</span>
+  <div class="py-40 text-center uppercase font-black text-zinc-800 text-3xl animate-pulse font-mono">
+  Свиток не обнаружен
   </div>
   </ng-template>
   </div>
   `,
   styles: `
   :host { display: block; width: 100%; }
-  ::ng-deep .prose { max-width: 100% !important; width: 100% !important; }
-  ::ng-deep .prose p { margin-bottom: 1.5em; }
+  ::ng-deep .prose { max-width: 100% !important; }
   `
 })
 export default class BlogPostPage {

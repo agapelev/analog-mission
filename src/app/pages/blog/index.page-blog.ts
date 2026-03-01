@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { RouteMeta } from '@analogjs/router';
 import { injectContentFiles } from '@analogjs/content';
-import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import { DatePipe, NgForOf, NgIf, AsyncPipe } from '@angular/common'; // Добавлен AsyncPipe и NgIf
 
 interface PostAttributes {
   title: string;
@@ -20,7 +20,7 @@ export const routeMeta: RouteMeta = {
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [RouterLink, DatePipe, NgForOf, NgIf],
+  imports: [RouterLink, DatePipe, NgForOf, NgIf, AsyncPipe], // Проверьте наличие всех здесь
   template: `
   <div class="min-h-screen w-full bg-[#0f011a] text-stone-100 font-sans selection:bg-cyan-500/30 overflow-x-hidden">
 
@@ -36,7 +36,7 @@ export const routeMeta: RouteMeta = {
   </nav>
 
   <div class="relative z-10 text-center px-4 max-w-7xl mt-12">
-  <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-8 italic animate-gradient-text-mystic drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] font-serif uppercase">
+  <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-8 italic animate-gradient-text-mystic drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] font-serif uppercase text-center">
   БЛОГ МЫСЛЕЙ
   </h1>
   <blockquote class="text-xl md:text-2xl text-stone-50 font-light italic leading-relaxed max-w-4xl mx-auto p-6 bg-violet-950/40 rounded-3xl backdrop-blur-md border border-violet-800">
@@ -54,6 +54,12 @@ export const routeMeta: RouteMeta = {
 
   @for (post of pagedPosts; track post.attributes.slug) {
     <article class="group relative pb-12 border-b border-violet-900/50 last:border-0">
+
+    <div *ngIf="post.attributes.coverImage" class="mb-8 overflow-hidden rounded-[2rem] border border-violet-800/50 aspect-video md:aspect-[21/9]">
+    <img [src]="post.attributes.coverImage"
+    class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 filter grayscale group-hover:grayscale-0">
+    </div>
+
     <div class="mb-6 flex items-center gap-6">
     <time class="text-violet-950 font-mono text-[10px] uppercase tracking-widest bg-cyan-400 px-4 py-1.5 rounded-full font-bold">
     {{ post.attributes.date | date: 'mediumDate' }}
@@ -89,12 +95,11 @@ export const routeMeta: RouteMeta = {
   </div>
 
   <aside class="lg:w-1/4">
-  <div class="sticky top-24 p-10 rounded-[2rem] border-2 border-cyan-900 bg-[#150022] shadow-xl">
+  <div class="sticky top-24 p-10 rounded-[2rem] border-2 border-cyan-900 bg-[#150022] shadow-xl text-left">
   <h3 class="text-sm font-bold uppercase tracking-widest mb-10 flex items-center text-cyan-400 font-mono">
   <span class="w-2 h-2 bg-cyan-400 rounded-full mr-4 animate-pulse"></span>
   Ключи познания
   </h3>
-
   <div class="flex flex-wrap gap-3">
   @for (tag of allTags; track tag) {
     <a [routerLink]="['/tags', tag]"
@@ -105,7 +110,6 @@ export const routeMeta: RouteMeta = {
   </div>
   </div>
   </aside>
-
   </div>
   </main>
 
@@ -129,18 +133,14 @@ export const routeMeta: RouteMeta = {
 })
 export default class Blog {
   readonly allPosts = injectContentFiles<PostAttributes>();
-
   get pagedPosts() {
     return [...this.allPosts]
     .sort((a, b) => new Date(b.attributes.date).getTime() - new Date(a.attributes.date).getTime())
     .slice(0, 10);
   }
-
   get allTags(): string[] {
     const tags = new Set<string>();
-    this.allPosts.forEach((post) => {
-      post.attributes.tags?.forEach((t) => tags.add(t));
-    });
+    this.allPosts.forEach(p => p.attributes.tags?.forEach(t => tags.add(t)));
     return Array.from(tags).sort();
   }
 }
