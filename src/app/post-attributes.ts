@@ -1,9 +1,9 @@
-// Отредактируйте ваш src/app/post-attributes.ts вот так:
+// src/app/post-attributes.ts
 export default interface PostAttributes {
   title: string;
   slug: string;
   description: string;
   date: string;
-  coverImage?: string; // "?" означает: "может быть, а может и не быть"
-  category: string;   // Теперь category официально разрешена, но не обязательна
+  tags: string[];
+  coverImage?: string;""
 }

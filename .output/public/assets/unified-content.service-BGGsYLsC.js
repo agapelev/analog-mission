@@ -1,0 +1,9 @@
+import{x as o}from"./index-CR3dTbW6.js";const t=class t{getBlogPosts(){return[{attributes:{title:"Начало пути Цитадель Духа в цифровую эпоху",slug:"pervaya-zapis",description:"Манифест миссии Shekinah Cloud. О том, как соединить незыблемость веры с текучестью программного кода.",date:"26 февраля 2026",category:"Трезвение, Духовность, Миссия"},filename:"pervaya-zapis.md",content:this.getPostContent("pervaya-zapis")},{attributes:{title:"Инструкция правого помошника благочестия",slug:"instruktsiya-pobochnika",description:"Руководство для стоящих на правом крыле служения.",date:"26 февраля 2026",category:"Служение, Духовность"},filename:"instruktsiya-pobochnika.md",content:this.getPostContent("instruktsiya-pobochnika")},{attributes:{title:"Шпаргалка разработчика для самоцели",slug:"shpargalka",description:"Принципы кодинга согласно Божьему плану.",date:"26 февраля 2026",category:"Код, Миссия"},filename:"shpargalka.md",content:this.getPostContent("shpargalka")},{attributes:{title:"Манифест проекта Цитадель Духа",slug:"manifest",description:"Основополагающие принципы Цитадели Духа.",date:"26 февраля 2026",category:"Манифест, Духовность"},filename:"manifest.md",content:this.getPostContent("manifest")}]}getBlogPost(a){const e=this.getBlogPosts().find(s=>s.attributes.slug===a);return e?{...e,content:this.getPostContent(a)}:null}getPostContent(a){return{"pervaya-zapis":`# Первое слово: Зачем мы здесь?
+
+Приветствую тебя, путник, в пространстве **«Цитадели Духа»**...`,"instruktsiya-pobochnika":`# Инструкция правого помошника благочестия
+
+Руководство для стоящих на правом крыле...`,shpargalka:`# Шпаргалка разработчика для самоцели
+
+Принципы кодинга согласно Божьему плану...`,manifest:`# Манифест проекта Цитадель Духа
+
+Основополагающие принципы Цитадели Духа...`}[a]||"# Свиток не найден"}};t.ɵfac=function(e){return new(e||t)},t.ɵprov=o({token:t,factory:t.ɵfac,providedIn:"root"});let n=t;export{n as U};

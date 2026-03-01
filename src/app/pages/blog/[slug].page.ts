@@ -1,37 +1,69 @@
 import { Component } from '@angular/core';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { injectContent, MarkdownComponent } from '@analogjs/content';
-import { AsyncPipe, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import PostAttributes from '../../post-attributes';
+
+interface PostAttributes {
+  title: string;
+  slug: string;
+  description: string;
+  date: string;
+  coverImage?: string;
+}
 
 @Component({
+  selector: 'app-blog-post',
   standalone: true,
-  imports: [MarkdownComponent, AsyncPipe, NgIf, RouterLink],
+  imports: [AsyncPipe, MarkdownComponent, DatePipe, RouterLink],
   template: `
-    <div class="min-h-screen bg-slate-950 text-slate-200 flex flex-col items-center">
-      <ng-container *ngIf="post$ | async as post; else noPost">
-        <header class="w-[98vw] py-20 px-10 md:px-20 bg-slate-900 border-b border-slate-800">
-          <a routerLink="/blog" class="text-emerald-500 uppercase tracking-[0.5em] text-xs no-underline mb-10 inline-block">← В архив</a>
-          <h1 class="text-6xl md:text-9xl font-black text-white italic tracking-tighter">{{ post.attributes.title }}</h1>
-        </header>
+  @if (post$ | async; as post) {
+    <article class="min-h-screen bg-[#0f011a] text-stone-200 selection:bg-cyan-500/30">
 
-        <main class="w-[98vw] px-10 md:px-20 py-20 text-left">
-          <article class="prose prose-invert prose-2xl max-w-none w-full font-serif italic text-slate-300">
-            <analog-markdown [content]="post.content"></analog-markdown>
-          </article>
-        </main>
-      </ng-container>
+    <nav class="fixed top-12 left-12 z-50">
+    <a routerLink="/blog" class="text-cyan-500 hover:text-cyan-300 transition-all font-mono text-xs uppercase tracking-[0.3em] bg-[#0f011a]/80 p-3 rounded-xl backdrop-blur-md border border-cyan-900/50 shadow-2xl">
+    ← Назад в Блог
+    </a>
+    </nav>
 
-      <ng-template #noPost>
-        <div class="py-40 text-center uppercase font-black text-red-600 text-5xl">Свиток не найден</div>
-      </ng-template>
+    <header class="relative h-[55vh] flex items-end p-8 md:p-16 border-b border-violet-900 overflow-hidden pt-32">
+    @if (post.attributes.coverImage) {
+      <img [src]="post.attributes.coverImage" class="absolute inset-0 w-full h-full object-cover opacity-30 scale-105">
+    }
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0f011a] via-transparent to-transparent"></div>
+
+    <div class="relative z-10 max-w-5xl">
+    <h1 class="text-5xl md:text-7xl font-black italic text-white uppercase font-serif tracking-tighter leading-tight drop-shadow-2xl animate-pulse-slow">
+    {{ post.attributes.title }}
+    </h1>
+    <p class="text-cyan-400 font-mono mt-8 uppercase tracking-[0.5em] text-xs font-bold bg-cyan-950/30 inline-block px-4 py-2 rounded-full">
+    {{ post.attributes.date | date: 'longDate' }}
+    </p>
     </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto py-24 px-6">
+    <div class="prose prose-invert prose-cyan max-w-none
+    prose-headings:font-serif prose-headings:italic prose-headings:tracking-tight
+    prose-p:text-stone-300 prose-p:leading-relaxed prose-p:text-xl
+    prose-img:rounded-[3rem] prose-img:border-2 prose-img:border-violet-900/50 shadow-2xl">
+    <analog-markdown [content]="post.content" />
+    </div>
+    </main>
+
+    <footer class="py-32 border-t border-violet-900/30 text-center">
+    <div class="text-cyan-900/20 font-mono text-[10px] uppercase tracking-[1em]">
+    End of Transmission | Citadel AI | 2026
+    </div>
+    </footer>
+    </article>
+  }
   `,
-  styles: `
-    :host { display: block; width: 100%; }
-    ::ng-deep .prose { max-width: 100% !important; width: 100% !important; }
-  `
+  styles: [`
+  :host { display: block; }
+  @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+  .animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+  `]
 })
 export default class BlogPostPage {
-  readonly post$ = injectContent<PostAttributes>();
+  readonly post$ = injectContent<PostAttributes>('slug');
 }

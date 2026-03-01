@@ -4,7 +4,6 @@ import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import tailwindcss from '@tailwindcss/vite';
 
-// Конфигурация Цитадели для Cloudflare Pages
 export default defineConfig(({ mode }) => ({
   publicDir: 'src/assets',
     build: {
@@ -16,12 +15,14 @@ export default defineConfig(({ mode }) => ({
     plugins: [
       tailwindcss(),
                                            analog({
-                                             content: true,
+                                             // 1. Включаем расширенный режим контента для Shiki
+                                             content: {
+                                               highlighter: 'shiki',
+                                             },
                                              static: true,
-                                             ssr: true,
+                                             ssr: false,
                                              nitro: {
                                                preset: 'cloudflare-pages',
-                                               // ФИНАЛЬНЫЙ ШТРИХ: Гарантируем, что Nitro создаст правильную структуру
                                                output: {
                                                  dir: '.output',
                                                  publicDir: '.output/public',
@@ -29,22 +30,24 @@ export default defineConfig(({ mode }) => ({
                                                },
                                              },
                                              prerender: {
-                                               routes: [
-                                                 '/',
-                                                 '/blog',
-                                                 '/blog/pervaya-zapis', // ТЕПЕРЬ ЭТОТ МАРШРУТ УЗАКОНЕН
-                                                 '/school',
-                                                 '/journal',
-                                                 '/web-arystan'
-                                               ],
+                                               // 2. Включаем автопоиск подстраниц блога
+                                               discover: true,
+                                               routes: async () => {
+                                                 return [
+                                                   '/',
+                                                   '/blog',
+                                                   '/school',
+                                                   '/journal',
+                                                   '/web-arystan',
+                                                 ];
+                                               },
                                                sitemap: {
-                                                 host: 'https://ваша-цитадель.pages.dev',
+                                                 host: 'https://analog-mission.pages.dev',
                                                },
                                              },
                                            }),
     ],
-    // Защита от ложной интерпретации Markdown как скриптов
-    assetsInclude: ['**/*.md'],
+    // 3. Убрали assetsInclude для .md, чтобы не мешать плагину Analog
     test: {
       globals: true,
       environment: 'jsdom',

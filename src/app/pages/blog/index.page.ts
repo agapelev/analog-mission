@@ -1,82 +1,146 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { RouteMeta } from '@analogjs/router';
+import type { RouteMeta } from '@analogjs/router';
+import { injectContentFiles } from '@analogjs/content';
+import { DatePipe, NgForOf, NgIf } from '@angular/common';
 
-// Метаданные страницы (Ваша находка по документации)
+interface PostAttributes {
+  title: string;
+  slug: string;
+  description: string;
+  date: string;
+  tags: string[];
+  coverImage?: string;
+}
+
 export const routeMeta: RouteMeta = {
-  title: 'Блог | Цитадель Духа',
+  title: 'Блог Мыслей | Мистическая Цитадель',
 };
 
 @Component({
+  selector: 'app-blog',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe, NgForOf, NgIf],
   template: `
-  <div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+  <div class="min-h-screen w-full bg-[#0f011a] text-stone-100 font-sans selection:bg-cyan-500/30 overflow-x-hidden">
 
-    <nav class="w-full border-b border-slate-800 bg-slate-900/80 px-6 py-4 flex justify-between items-center backdrop-blur-md sticky top-0 z-50">
-      <div class="flex items-center gap-3">
-        <span class="text-xl">✍️</span>
-        <span class="text-xs font-mono tracking-widest text-slate-500 uppercase font-bold">Module // Blog</span>
-      </div>
-      <a routerLink="/" class="text-xs font-bold text-slate-400 hover:text-emerald-400 transition-colors uppercase tracking-widest">
-        ← На главную
+  <header class="relative h-[65vh] w-full flex items-center justify-center overflow-hidden border-b-8 border-violet-900 shadow-2xl pt-24">
+  <img src="https://images.unsplash.com/photo-1599676110940-06f156d11b33?q=80&w=2560"
+  class="absolute inset-0 w-full h-full object-cover opacity-50 filter hue-rotate-60" alt="Divine Digital Light">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0f011a]/60 to-[#0f011a]"></div>
+
+  <nav class="absolute top-12 left-12 z-50">
+  <a routerLink="/" class="text-cyan-500 hover:text-cyan-300 transition-all font-mono text-xs uppercase tracking-[0.3em] font-bold">
+  ← На главную
+  </a>
+  </nav>
+
+  <div class="relative z-10 text-center px-4 max-w-7xl mt-12">
+  <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-8 italic animate-gradient-text-mystic drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] font-serif uppercase">
+  БЛОГ МЫСЛЕЙ
+  </h1>
+  <blockquote class="text-xl md:text-2xl text-stone-50 font-light italic leading-relaxed max-w-4xl mx-auto p-6 bg-violet-950/40 rounded-3xl backdrop-blur-md border border-violet-800">
+  «Бог есть бесконечный Интеллект, а технологии — лишь попытка человека воспроизвести Его эхо в кремниевом безмолвии».
+  <footer class="mt-6 text-cyan-400 font-mono text-xs uppercase tracking-[0.4em]">Цитадель Духа & AI</footer>
+  </blockquote>
+  </div>
+  </header>
+
+  <main class="w-full max-w-[1920px] mx-auto py-20 px-6 md:px-12">
+  <div class="flex flex-col lg:flex-row gap-20">
+
+  <div class="lg:w-3/4 space-y-20">
+  <h3 class="text-xs font-mono uppercase tracking-[0.7em] text-cyan-600 mb-10 font-bold">Лента откровений</h3>
+
+  @for (post of pagedPosts; track post.attributes.slug) {
+    <article class="group relative pb-12 border-b border-violet-900/50 last:border-0">
+    <div class="mb-6 flex items-center gap-6">
+    <time class="text-violet-950 font-mono text-[10px] uppercase tracking-widest bg-cyan-400 px-4 py-1.5 rounded-full font-bold">
+    {{ post.attributes.date | date: 'mediumDate' }}
+    </time>
+    <span class="h-px flex-1 bg-gradient-to-r from-violet-800 to-transparent"></span>
+    </div>
+
+    <a [routerLink]="['/blog', post.attributes.slug]" class="block group">
+    <h2 class="text-3xl font-extrabold text-stone-50 group-hover:text-cyan-400 transition-colors mb-4 tracking-tight font-serif text-left">
+    {{ post.attributes.title }}
+    </h2>
+    <p class="text-base text-stone-400 leading-relaxed max-w-4xl line-clamp-2 text-left">
+    {{ post.attributes.description }}
+    </p>
+    </a>
+
+    <div class="mt-6 flex flex-wrap gap-3">
+    @for (tag of post.attributes.tags; track tag) {
+      <a [routerLink]="['/tags', tag]"
+      class="px-4 py-1 text-[10px] font-mono text-cyan-400 border border-cyan-900 rounded-full uppercase hover:bg-cyan-900 transition-colors cursor-pointer">
+      #{{ tag }}
       </a>
-    </nav>
+    }
+    </div>
+    </article>
+  }
 
-    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
-      <div class="flex flex-col lg:flex-row gap-12">
+  <div *ngIf="allPosts.length > 10" class="pt-10 flex justify-center">
+  <button class="px-8 py-3 border-2 border-cyan-500 text-cyan-400 font-mono text-xs uppercase tracking-widest hover:bg-cyan-500 hover:text-cyan-950 transition-all">
+  Смотреть архивные записи →
+  </button>
+  </div>
+  </div>
 
-        <div class="lg:w-2/3 space-y-10">
-          <h1 class="text-6xl font-serif italic text-emerald-400 mb-12">Летопись</h1>
+  <aside class="lg:w-1/4">
+  <div class="sticky top-24 p-10 rounded-[2rem] border-2 border-cyan-900 bg-[#150022] shadow-xl">
+  <h3 class="text-sm font-bold uppercase tracking-widest mb-10 flex items-center text-cyan-400 font-mono">
+  <span class="w-2 h-2 bg-cyan-400 rounded-full mr-4 animate-pulse"></span>
+  Ключи познания
+  </h3>
 
-          <article class="bg-slate-900/40 border border-slate-800 p-8 rounded-3xl shadow-xl hover:border-emerald-900/50 transition-all group">
-            <div class="text-[10px] font-mono text-emerald-500/60 mb-4 uppercase tracking-[0.3em]">
-              26 февраля 2026 // Архитектура
-            </div>
-
-            <h2 class="text-3xl font-bold text-white mb-6 group-hover:text-emerald-400 transition-colors">
-              Начало пути: Цитадель Духа в цифровую эпоху
-            </h2>
-
-            <p class="text-slate-400 leading-relaxed mb-8 italic">
-              «Мы завершили создание фундамента. Теперь каждая страница — это открытое пространство, готовое принять в себя глубину размышлений...»
-            </p>
-
-            <a [routerLink]="['/blog', 'pervaya-zapis']"
-               class="inline-block bg-emerald-600/10 border border-emerald-500/30 text-emerald-500 px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-emerald-600 hover:text-white transition-all">
-              Читать полностью →
-            </a>
-          </article>
-        </div>
-
-        <aside class="lg:w-1/3 space-y-8">
-          <div class="bg-slate-900/20 border border-slate-800 p-8 rounded-3xl">
-            <h3 class="text-white font-bold mb-6 border-b border-slate-800 pb-2 text-sm uppercase tracking-widest">Рубрики</h3>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-3 py-1 bg-slate-800 rounded-full text-[10px] text-slate-400">#ДУХОВНОСТЬ</span>
-              <span class="px-3 py-1 bg-slate-800 rounded-full text-[10px] text-slate-400">#КОД</span>
-              <span class="px-3 py-1 bg-slate-800 rounded-full text-[10px] text-slate-400">#МИССИЯ</span>
-            </div>
-
-            <div class="mt-10 pt-6 border-t border-slate-800">
-              <p class="text-xs text-slate-500 italic leading-relaxed">
-                «Слово — это плоть мысли».
-                <br/>— Григорий Богослов
-              </p>
-            </div>
-          </div>
-        </aside>
-
-      </div>
-    </main>
-
-    <footer class="w-full py-8 border-t border-slate-900 text-center">
-      <p class="text-[10px] tracking-[0.3em] uppercase text-slate-600 font-sans">
-        Шехина Облачная Миссия • 2026
-      </p>
-    </footer>
+  <div class="flex flex-wrap gap-3">
+  @for (tag of allTags; track tag) {
+    <a [routerLink]="['/tags', tag]"
+    class="px-5 py-2 text-[10px] font-mono font-bold rounded-full border border-cyan-800 text-cyan-400 hover:border-fuchsia-500 hover:text-fuchsia-400 transition-all uppercase bg-cyan-950/50 cursor-pointer">
+    {{ tag }}
+    </a>
+  }
+  </div>
+  </div>
+  </aside>
 
   </div>
-  `
+  </main>
+
+  <footer class="border-t-4 border-cyan-900 bg-[#0a000a] py-16 text-center text-cyan-900/50 font-mono text-[10px] uppercase tracking-[0.6em]">
+  Design by Citadel AI | 2026 | Soli Deo Gloria
+  </footer>
+  </div>
+  `,
+  styles: [`
+  :host { display: block; width: 100%; }
+  .animate-gradient-text-mystic {
+    background: linear-gradient(90deg, #22d3ee, #a855f7, #ec4899, #22d3ee);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient-animation 8s linear infinite;
+  }
+  @keyframes gradient-animation { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+  `],
 })
-export default class BlogPage {}
+export default class Blog {
+  readonly allPosts = injectContentFiles<PostAttributes>();
+
+  get pagedPosts() {
+    return [...this.allPosts]
+    .sort((a, b) => new Date(b.attributes.date).getTime() - new Date(a.attributes.date).getTime())
+    .slice(0, 10);
+  }
+
+  get allTags(): string[] {
+    const tags = new Set<string>();
+    this.allPosts.forEach((post) => {
+      post.attributes.tags?.forEach((t) => tags.add(t));
+    });
+    return Array.from(tags).sort();
+  }
+}
