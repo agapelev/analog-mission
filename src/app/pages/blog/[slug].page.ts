@@ -17,17 +17,15 @@ import PostAttributes from '../../post-attributes';
   <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/40 to-transparent"></div>
   </div>
 
-  <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none z-0">
-  <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-blue-500/20"></div>
-  </div>
-
   <div class="max-w-4xl mx-auto relative z-10 text-left w-full">
-  <a routerLink="/blog" class="text-emerald-500 uppercase tracking-[0.5em] text-[10px] no-underline mb-12 inline-block hover:text-emerald-300 transition-colors font-mono font-bold">
-  ← Назад в архив
+  <a routerLink="/blog" class="text-emerald-500 uppercase tracking-[0.5em] text-[10px] no-underline mb-12 inline-block hover:text-emerald-300 transition-colors font-mono font-bold bg-emerald-950/30 px-4 py-2 rounded-lg border border-emerald-900/30">
+  ← Назад к ленте
   </a>
-  <h1 class="text-4xl md:text-7xl font-bold text-zinc-100 italic tracking-tight leading-tight mb-8 drop-shadow-2xl">
+
+  <h1 class="text-4xl md:text-7xl font-bold text-zinc-100 italic tracking-tight leading-tight mb-8 drop-shadow-2xl uppercase font-serif">
   {{ post.attributes.title }}
   </h1>
+
   <div class="flex items-center gap-4">
   <span class="h-px w-12 bg-emerald-500"></span>
   <span class="text-zinc-500 font-mono text-xs uppercase tracking-widest">{{ post.attributes.date }}</span>
@@ -47,10 +45,10 @@ import PostAttributes from '../../post-attributes';
   <footer class="w-full border-t border-slate-800 bg-[#010409] py-12">
   <div class="max-w-4xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
   <div class="text-slate-400 font-mono text-[11px] uppercase tracking-widest">
-  Разработано <a href="/web-arystan" target="_blank" class="text-emerald-500 font-bold">Web Arystan</a>
+  Разработано <a href="/web-arystan" target="_blank" class="text-emerald-500 font-bold hover:text-emerald-300 transition-colors">Web Arystan</a>
   </div>
-  <div class="text-slate-400 font-mono text-[11px] uppercase tracking-widest">
-  При поддержке <a href="https://geminicli.com" target="_blank" class="text-cyan-500 font-bold">AI Gemini</a>
+  <div class="text-slate-500 font-mono text-[11px] uppercase tracking-widest">
+  Soli Deo Gloria | 2026
   </div>
   </div>
   </footer>
@@ -58,7 +56,7 @@ import PostAttributes from '../../post-attributes';
 
   <ng-template #noPost>
   <div class="py-40 text-center uppercase font-black text-zinc-800 text-3xl animate-pulse font-mono">
-  Свиток не обнаружен
+  Свиток не обнаружен в архивах памяти
   </div>
   </ng-template>
   </div>

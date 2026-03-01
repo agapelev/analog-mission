@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { RouteMeta } from '@analogjs/router';
 import { injectContentFiles } from '@analogjs/content';
-import { DatePipe, NgForOf, NgIf } from '@angular/common'; // Добавил NgIf
+import { DatePipe, NgIf } from '@angular/common'; // Оставил NgIf, убрал неиспользуемый NgForOf
 
 import type PostAttributes from '../../post-attributes';
 
@@ -19,7 +19,7 @@ export const routeMeta: RouteMeta = {
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [RouterLink, DatePipe, NgForOf, NgIf],
+  imports: [RouterLink, DatePipe, NgIf],
   template: `
   <div class="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-emerald-500/30 overflow-x-hidden">
 
@@ -42,8 +42,8 @@ export const routeMeta: RouteMeta = {
   <main class="max-w-7xl mx-auto py-16 px-4 sm:px-8">
   <div class="flex flex-col lg:flex-row gap-16">
 
-  <div class="lg:w-2/3 space-y-20">
-  @for (post of posts; track post.attributes.slug) {
+  <div class="lg:w-2/3 space-y-20 text-left">
+  @for (post of pagedPosts; track post.attributes.slug + $index) {
     <article class="group relative text-left">
     <div *ngIf="post.attributes.coverImage" class="mb-8 overflow-hidden rounded-3xl border border-slate-800 aspect-[21/9]">
     <img [src]="post.attributes.coverImage"
@@ -58,8 +58,8 @@ export const routeMeta: RouteMeta = {
     <span class="h-px flex-1 bg-slate-800"></span>
     </div>
 
-    <a [routerLink]="['/blog', post.attributes.slug]" class="block">
-    <h2 class="text-4xl font-bold text-slate-100 group-hover:text-emerald-400 transition-all duration-300 mb-4">
+    <a [routerLink]="['/blog', post.attributes.slug]" class="block no-underline">
+    <h2 class="text-4xl font-bold text-slate-100 group-hover:text-emerald-400 transition-all duration-300 mb-4 uppercase">
     {{ post.attributes.title }}
     </h2>
     <p class="text-lg text-slate-400 leading-relaxed line-clamp-3 group-hover:text-slate-300 transition-colors">
@@ -76,10 +76,17 @@ export const routeMeta: RouteMeta = {
     </div>
     </article>
   }
+
+  <div *ngIf="allPosts.length > 10" class="pt-12 flex justify-center border-t border-slate-800/50">
+  <a routerLink="/blog/archive"
+  class="px-10 py-4 border border-emerald-500/50 text-emerald-500 font-mono text-xs uppercase tracking-[0.4em] hover:bg-emerald-500 hover:text-slate-950 transition-all duration-500 no-underline rounded-full">
+  Смотреть архивные записи →
+  </a>
+  </div>
   </div>
 
   <aside class="lg:w-1/3">
-  <div class="sticky top-12 p-8 rounded-3xl border border-slate-800 bg-slate-900/30 backdrop-blur-sm">
+  <div class="sticky top-12 p-8 rounded-3xl border border-slate-800 bg-slate-900/30 backdrop-blur-sm text-left">
   <h3 class="text-sm font-bold uppercase tracking-widest text-emerald-400 mb-6 flex items-center">
   <span class="w-2 h-2 bg-emerald-500 rounded-full mr-3 animate-pulse"></span>
   Ключи познания
@@ -124,10 +131,19 @@ export const routeMeta: RouteMeta = {
   `],
 })
 export default class Blog {
-  readonly posts = injectContentFiles<PostAttributes>();
+  // Храним все файлы
+  readonly allPosts = injectContentFiles<PostAttributes>();
+
+  // Вычисляем только первые 10 для главной страницы
+  get pagedPosts() {
+    return [...this.allPosts]
+    .sort((a, b) => new Date(b.attributes.date).getTime() - new Date(a.attributes.date).getTime())
+    .slice(0, 10);
+  }
+
   get allTags(): string[] {
     const tags = new Set<string>();
-    this.posts.forEach(p => p.attributes.tags?.forEach(t => tags.add(t)));
+    this.allPosts.forEach(p => p.attributes.tags?.forEach(t => tags.add(t)));
     return Array.from(tags).sort();
   }
 }
