@@ -1,22 +1,39 @@
-# analog-mission
+# 🏰 Цитадель Духа: Analog Mission 2026
 
-This project was generated with [Analog](https://analogjs.org), the fullstack meta-framework for Angular.
+![Analog.js](https://img.shields.io/badge/Framework-Analog.js-orange?style=for-the-badge&logo=angular)
+![TailwindCSS](https://img.shields.io/badge/Styling-TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css)
+![Cloudflare](https://img.shields.io/badge/Deployment-Cloudflare_Pages-F38020?style=for-the-badge&logo=cloudflare)
 
-## Setup
+## 📜 Суть Портала
+Этот проект — не просто блог, а **Цифровая Цитадель**, объединяющая четыре духовных и интеллектуальных направления в единую экосистему. Мы используем мощь **Angular** и мета-фреймворка **Analog.js**, чтобы создать сверхбыстрый, типизированный и эстетически совершенный интерфейс для передачи глубоких смыслов.
 
-Run `npm install` to install the application dependencies.
+> «Бог есть бесконечный Интеллект, а технологии — лишь попытка человека воспроизвести Его эхо».
 
-## Development
+---
 
-Run `npm start` for a dev server. Navigate to `http://localhost:5173/`. The application automatically reloads if you change any of the source files.
+## 🚀 Быстрый Деплой (Deploy Now)
 
-## Build
+Выберите вашу облачную обитель для мгновенного развертывания:
 
-Run `npm run build` to build the client/server project. The client build artifacts are located in the `dist/analog/public` directory. The server for the API build artifacts are located in the `dist/analog/server` directory.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanalogjs%2Fanalog-platform)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/analogjs/analog-platform)
+[![Deploy to Cloudflare Pages](https://deploy.workers.cloudflare.com/button)](https://dash.cloudflare.com/?to=/:account/pages/new)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/analogjs/analog-platform)
 
-## Community
+---
 
-- Visit and Star the [GitHub Repo](https://github.com/analogjs/analog)
-- Join the [Discord](https://chat.analogjs.org)
-- Follow us on [Twitter](https://twitter.com/analogjs)
-- Become a [Sponsor](https://github.com/sponsors/brandonroberts)
+## 🛠 Технологический Стек
+
+- **Core:** Angular 19+ (Signal-based)
+- **Meta-framework:** [Analog.js](https://analogjs.org)
+- **Content:** Markdown (Contentlayer-like flow)
+- **Styling:** Tailwind CSS (Custom Dark Mystic Theme)
+- **Infrastructure:** Cloudflare Pages & Workers
+
+---
+
+## 🏗 Настройка и Разработка
+
+### Установка
+```bash
+npm install

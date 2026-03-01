@@ -923,13 +923,6 @@ const assets = {
     "size": 696,
     "path": "../public/sitemap.xml"
   },
-  "/blog/index.html": {
-    "type": "text/html; charset=utf-8",
-    "etag": "\"419-OoAqlZUYh0PYZmBacduM3qz/0ow\"",
-    "mtime": "2026-02-28T21:34:35.343Z",
-    "size": 1049,
-    "path": "../public/blog/index.html"
-  },
   "/assets/AI-Group-Model-CZvjJSnS.md": {
     "type": "text/markdown; charset=utf-8",
     "etag": "\"19b4-OuGCpV0/jmHutGFTmz+1LG/MQU8\"",
@@ -1153,6 +1146,13 @@ const assets = {
     "mtime": "2026-02-28T21:34:34.333Z",
     "size": 2627,
     "path": "../public/assets/unified-content.service-BGGsYLsC.js"
+  },
+  "/blog/index.html": {
+    "type": "text/html; charset=utf-8",
+    "etag": "\"419-OoAqlZUYh0PYZmBacduM3qz/0ow\"",
+    "mtime": "2026-02-28T21:34:35.343Z",
+    "size": 1049,
+    "path": "../public/blog/index.html"
   },
   "/journal/index.html": {
     "type": "text/html; charset=utf-8",
